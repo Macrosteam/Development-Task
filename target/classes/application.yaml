@@ -15,13 +15,13 @@ spring:
   report:
     hour: 0
     minute: 29
-    recipient: omarbourhani77@gmail.com
+    recipient: receiver@gmail.com
     subject: "Daily Report"
   mail:
     host: smtp.gmail.com
     port: 587
-    username: omarbourhani77@gmail.com
-    password: axmw drfa vbsm mkxt
+    username: sender@gmail.com
+    password: sender_password
     properties:
       mail:
         smtp:
