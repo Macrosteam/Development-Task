@@ -31,36 +31,9 @@ public class ReportCache {
 
     private static final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-    public void read() {
-        File file = new File(PATH);
-
-        if (file.exists()) {
-            try {
-                ReportState state = mapper.readValue(file, ReportState.class);
-
-                purchases = state.purchases != null ? state.purchases : new ArrayList<>();
-                refunds = state.refunds != null ? state.refunds : new ArrayList<>();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void write() {
-        ReportState state = new ReportState();
-        state.purchases = this.purchases;
-        state.refunds = this.refunds;
-
-        try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(PATH), state);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     public List<Long> getPurchaseRange() {
-        read(); // refresh from file before reading
+        read();
         return getRange(purchases);
     }
 
@@ -81,6 +54,32 @@ public class ReportCache {
         write();
     }
 
+    private void read() {
+        File file = new File(PATH);
+
+        if (file.exists()) {
+            try {
+                ReportState state = mapper.readValue(file, ReportState.class);
+
+                purchases = state.purchases != null ? state.purchases : new ArrayList<>();
+                refunds = state.refunds != null ? state.refunds : new ArrayList<>();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void write() {
+        ReportState state = new ReportState();
+        state.purchases = this.purchases;
+        state.refunds = this.refunds;
+
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(PATH), state);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private List<Long> getRange(List<IdDate> list) {
         List<Long> ret = new ArrayList<>();
@@ -133,3 +132,4 @@ public class ReportCache {
         public List<IdDate> refunds;
     }
 }
+
